@@ -1,0 +1,9 @@
+# Binaries and Objects
+*.o
+./build
+
+# Dependency Files
+*.d
+
+# .vscode :(
+.vscode
