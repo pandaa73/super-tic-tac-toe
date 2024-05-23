@@ -1,5 +1,8 @@
-#ifndef __STTT_GRID_H
-#define __STTT_GRID_H
+#ifndef __STTT_GAME_H
+#define __STTT_GAME_H
+
+#include <defs.h>
+#include <../settings.h>
 
 #define GRID_BIG_SIZE           (GRID_SIZE / 3)
 #define GRID_SMALL_SIZE         ((GRID_BIG_SIZE - 2 * GRID_BIG_SPACING) / 3)
@@ -20,4 +23,10 @@ typedef enum {
 
 typedef cell_state grid_t[3][3];
 
-#endif /* __STTT_GRID_H */
+void game_event_handler(void);
+void game_screen_drawer(void);
+
+void game_end_event_handler(void);
+void game_end_screen_drawer(void);
+
+#endif /* __STTT_GAME_H */

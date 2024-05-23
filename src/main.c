@@ -1,7 +1,4 @@
-#include <grid/handler.h>
-#include <grid/drawer.h>
-#include <defs.h>
-
+#include <variables.h>
 #include <../settings.h>
 
 #include <raylib.h>
@@ -15,21 +12,14 @@ int main(void) {
     font = LoadFontEx("./assets/font.ttf", 360, NULL, 0);
     if(!IsFontReady(font)) TraceLog(LOG_FATAL, "Failed to load font.");
 
-    cell_state winner = CELL_NONE;
     while(!WindowShouldClose()) {
         ClearBackground(BLACK);
-        int mouseX = GetMouseX();
-        int mouseY = GetMouseY();
 
-        if(winner == CELL_NONE && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
-            winner = handle_input(mouseX, mouseY);
+        event_handler();
 
         BeginDrawing();
-            draw_grid(next_grid_x, next_grid_y);
+            screen_drawer();
 
-            if(winner == CELL_TIE) draw_tie();
-            else if(winner != CELL_NONE) draw_win(winner);
-            
         EndDrawing();
     }
 

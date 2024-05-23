@@ -1,6 +1,6 @@
 # Binaries and Objects
 *.o
-./build
+build/
 
 # Dependency Files
 *.d
