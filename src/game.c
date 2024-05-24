@@ -285,14 +285,14 @@ void game_screen_drawer(void) {
     );
 
     DrawLineEx(
-        (Vector2){        0 + GRID_BORDER_Y, 1 * GRID_BIG_SIZE + GRID_BORDER_X},
-        (Vector2){GRID_SIZE + GRID_BORDER_Y, 1 * GRID_BIG_SIZE + GRID_BORDER_X},
+        (Vector2){        0 + GRID_BORDER_X, 1 * GRID_BIG_SIZE + GRID_BORDER_Y},
+        (Vector2){GRID_SIZE + GRID_BORDER_X, 1 * GRID_BIG_SIZE + GRID_BORDER_Y},
         10, WHITE
     );
 
     DrawLineEx(
-        (Vector2){        0 + GRID_BORDER_Y, 2 * GRID_BIG_SIZE + GRID_BORDER_X},
-        (Vector2){GRID_SIZE + GRID_BORDER_Y, 2 * GRID_BIG_SIZE + GRID_BORDER_X},
+        (Vector2){        0 + GRID_BORDER_X, 2 * GRID_BIG_SIZE + GRID_BORDER_Y},
+        (Vector2){GRID_SIZE + GRID_BORDER_X, 2 * GRID_BIG_SIZE + GRID_BORDER_Y},
         10, WHITE
     );
 
