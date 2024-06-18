@@ -1,8 +1,12 @@
 #include <game.h>
+#include <font.h>
 #include <variables.h>
 
 #include <raylib.h>
 #include <string.h>
+
+#define END_BORDER_X 15
+#define END_BORDER_Y 10
 
 grid_t grid[3][3];
 grid_t wins;
@@ -240,11 +244,8 @@ void game_event_handler(void) {
                     wins[i][j] = CELL_TIE;
                     ties++;
 
-                    if(wins_x + wins_o + ties == 9) {
-                        if(wins_x == wins_o) winner = CELL_TIE;
-                        else if(wins_x > wins_o) winner = CELL_X;
-                        else winner = CELL_O;
-                    }
+                    if(wins_x + wins_o + ties == 9)
+                        winner = CELL_TIE;
                 }
 
                 if(wins[k][l]) {
@@ -367,41 +368,42 @@ void game_end_event_handler(void) {
 void game_end_screen_drawer(void) {
     game_screen_drawer();
 
-    char tie_str[25] = " The game ends in a tie ";
-    char win_str[16] = " Player # wins ";
-    win_str[8] = winner;
+    char tie_str[] = "THE GAME ENDS IN A DRAW";
+    char win_str[] = "PLAYER # WINS";
+    win_str[7] = winner + 'A' - 'a';
 
     const char *end_str = (winner == CELL_TIE ? tie_str : win_str);
 
-    Vector2 text_size = MeasureTextEx(font, end_str, TEXT_FONT_SIZE,
-        TEXT_SPACING);
+    Vector2 text_size = measure_text(end_str, FONTSZ_DEFAULT,
+        TEXT_SPACING, 0);
 
-    text_size.y += TEXT_FONT_SIZE / 3;
+    text_size.x += 2 * END_BORDER_X;
+    text_size.y += 2 * END_BORDER_Y;
 
     DrawRectangleV(
         (Vector2){
-            GRID_BORDER_X + (GRID_SIZE - text_size.x) / 2,
-            GRID_BORDER_Y + (GRID_SIZE - text_size.y) / 2 
+            GRID_BORDER_X + (GRID_SIZE - text_size.x) / 2 - END_BORDER_X,
+            GRID_BORDER_Y + (GRID_SIZE - text_size.y) / 2 - END_BORDER_Y
         },
         text_size, BLACK
     );
 
     DrawRectangleLinesEx(
         (Rectangle){
-            GRID_BORDER_X + (GRID_SIZE - text_size.x) / 2 - GRID_BIG_THICKNESS,
-            GRID_BORDER_Y + (GRID_SIZE - text_size.y) / 2 - GRID_BIG_THICKNESS,
+            GRID_BORDER_X + (GRID_SIZE - text_size.x) / 2
+            - GRID_BIG_THICKNESS - END_BORDER_X,
+            GRID_BORDER_Y + (GRID_SIZE - text_size.y) / 2
+            - GRID_BIG_THICKNESS - END_BORDER_Y,
             text_size.x + 2 * GRID_BIG_THICKNESS,
             text_size.y + 2 * GRID_BIG_THICKNESS
         },
         GRID_BIG_THICKNESS, YELLOW
     );
 
-    DrawTextEx(
-        font, end_str,
-        (Vector2){
-            GRID_BORDER_X + (GRID_SIZE - text_size.x) / 2,
-            GRID_BORDER_Y + (GRID_SIZE - text_size.y) / 2 
-        },
-        TEXT_FONT_SIZE, TEXT_SPACING, YELLOW
+    draw_text(
+        end_str,
+        GRID_BORDER_X + (GRID_SIZE - text_size.x) / 2,
+        GRID_BORDER_Y + (GRID_SIZE - text_size.y) / 2,
+        FONTSZ_DEFAULT, TEXT_SPACING, 0, YELLOW
     );
 }
