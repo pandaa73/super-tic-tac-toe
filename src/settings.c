@@ -63,8 +63,9 @@ void resolution_callback(void *self) {
         monitor_height / 2 - height / 2
     );
 
+    unload_font();
     unload_all_textures();
-    
+
     init_font();
     init_settings();
 }

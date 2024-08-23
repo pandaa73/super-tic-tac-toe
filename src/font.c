@@ -1,6 +1,8 @@
 #include <font.h>
 #include <settings.h>
 
+#include <string.h>
+
 Texture2D font_tx[FONTSZ_SIZE];
 int font_sz[FONTSZ_SIZE];
 
@@ -29,7 +31,9 @@ void init_font(void) {
 void unload_font(void) {
     for(fontsize_t it = FONTSZ_DEFAULT; it < FONTSZ_SIZE; it++) {
         if(IsTextureReady(font_tx[it])) UnloadTexture(font_tx[it]);
-    }    
+    }
+
+    memset(font_tx, 0x00, sizeof(font_tx));
 }
 
 void draw_text(const char *text, int x, int y, fontsize_t size, int x_spacing,

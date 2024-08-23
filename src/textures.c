@@ -57,4 +57,6 @@ void unload_all_textures(void) {
     for(texture_t it = TEX_NONE; it < TEX_SIZE; ++it) {
         if(IsTextureReady(tex_buffer[it])) UnloadTexture(tex_buffer[it]);
     }
+
+    memset(tex_buffer, 0x00, sizeof(tex_buffer));
 }
