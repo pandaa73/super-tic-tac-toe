@@ -1,18 +1,18 @@
 #include <variables.h>
 #include <main_menu.h>
 #include <font.h>
-#include <../settings.h>
+#include <settings.h>
+#include <quit.h>
 
 #include <raylib.h>
 
 int main(void) {
-    // SetTraceLogLevel(LOG_WARNING);
-    InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Super Tic-Tac-Toe!");
+    load_settings();
+    // load_settings_default();
+
+    InitWindow(get_window_width(), get_window_height(), "Super Tic-Tac-Toe!");
 
     if(!IsWindowReady()) TraceLog(LOG_FATAL, "Failed to created window.");
-
-    font = LoadFontEx("./assets/font.ttf", 360, NULL, 0);
-    if(!IsFontReady(font)) TraceLog(LOG_FATAL, "Failed to load font.");
 
     init_main_menu();
     init_font();
@@ -28,8 +28,7 @@ int main(void) {
         EndDrawing();
     }
 
-    UnloadFont(font);
-    CloseWindow();
+    quit();
 
     return 0;
 }

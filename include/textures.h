@@ -8,6 +8,7 @@ typedef enum {
     TEX_BACKGROUND,
     TEX_BUTTON12,
     TEX_TITLE,
+    TEX_SETTINGS,
     TEX_SIZE
 } texture_t;
 
@@ -16,5 +17,7 @@ void draw_texture_rec(texture_t texture, int x, int y, Color colour,
    Rectangle source);
 
 void load_texture(texture_t texture, bool autoscale);
+
+void unload_all_textures(void);
 
 #endif /* __STTT_TEXTURE_H */

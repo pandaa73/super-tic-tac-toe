@@ -1,4 +1,7 @@
-#include <texture.h>
+#include <textures.h>
+#include <settings.h>
+#include <defs.h>
+#include <string.h>
 
 Texture2D tex_buffer[TEX_SIZE];
 
@@ -16,10 +19,11 @@ void draw_texture_rec(texture_t texture, int x, int y, Color colour,
 }
 
 void load_texture(texture_t texture, bool autoscale) {
-    if(texture >= TEX_SIZE) return;
+    if(texture >= TEX_SIZE || texture <= TEX_NONE) return;
+    if(IsTextureReady(tex_buffer[texture])) return;
 
     Image tmp;
-    int scale = autoscale ? GetScreenWidth() / 240 : 1;
+    int scale = autoscale ? get_window_width() / 240 : 1;
 
     switch(texture) {
         case TEX_BACKGROUND:
@@ -30,6 +34,9 @@ void load_texture(texture_t texture, bool autoscale) {
         
         case TEX_TITLE:
             tmp = LoadImage("assets/title.png"); break;
+        
+        case TEX_SETTINGS:
+            tmp = LoadImage("assets/settings.png"); break;
     }
 
     if(!IsImageReady(tmp)) {
@@ -41,5 +48,13 @@ void load_texture(texture_t texture, bool autoscale) {
 
     if(!IsTextureReady(tex_buffer[texture])) {
         TraceLog(LOG_FATAL, "Failed to log texture");
+    }
+
+    UnloadImage(tmp);
+}
+
+void unload_all_textures(void) {
+    for(texture_t it = TEX_NONE; it < TEX_SIZE; ++it) {
+        if(IsTextureReady(tex_buffer[it])) UnloadTexture(tex_buffer[it]);
     }
 }

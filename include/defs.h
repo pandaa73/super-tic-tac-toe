@@ -5,6 +5,7 @@
 
 typedef unsigned long size_t;
 typedef unsigned char bool_t;
+typedef unsigned char byte_t;
 
 typedef void (*event_handler_t)(void);
 typedef void (*screen_drawer_t)(void);

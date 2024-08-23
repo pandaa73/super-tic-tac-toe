@@ -1,4 +1,5 @@
 #include <font.h>
+#include <settings.h>
 
 Texture2D font_tx[FONTSZ_SIZE];
 int font_sz[FONTSZ_SIZE];
@@ -9,7 +10,7 @@ void init_font(void) {
         TraceLog(LOG_FATAL, "Failed to load font into image");
     }
 
-    font_sz[FONTSZ_DEFAULT] = GetScreenWidth() / 240;
+    font_sz[FONTSZ_DEFAULT] = get_window_width() / 240;
 
     ImageResizeNN(
         &font_default_i,
@@ -21,6 +22,14 @@ void init_font(void) {
     if(!IsTextureReady(font_tx[FONTSZ_DEFAULT])) {
         TraceLog(LOG_FATAL, "Failed to load font into texture");
     }
+
+    UnloadImage(font_default_i);
+}
+
+void unload_font(void) {
+    for(fontsize_t it = FONTSZ_DEFAULT; it < FONTSZ_SIZE; it++) {
+        if(IsTextureReady(font_tx[it])) UnloadTexture(font_tx[it]);
+    }    
 }
 
 void draw_text(const char *text, int x, int y, fontsize_t size, int x_spacing,

@@ -4,8 +4,6 @@
 #include <defs.h>
 #include <raylib.h>
 
-extern Font font;
-
 extern event_handler_t event_handler;
 extern screen_drawer_t screen_drawer;
 

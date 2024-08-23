@@ -3,13 +3,11 @@
 #include <game.h>
 #include <font.h>
 #include <gui.h>
-#include <../settings.h>
+#include <settings.h>
+#include <quit.h>
 
-#include <raylib.h>
-#include <stdlib.h>
-
-bool init = 0;
-gui_handler_t handler;
+static bool init = 0;
+static gui_handler_t handler;
 
 gui_element_t       offline_button;
 gui_button_style_t  offline_style;
@@ -24,50 +22,56 @@ gui_element_t       quit_button;
 gui_button_style_t  quit_style;
 
 void offline_callback(void *self) {
+    init_game();
+
     event_handler = game_event_handler;
     screen_drawer = game_screen_drawer;
 }
 
-void quit_callback(void *self) {
-    UnloadFont(font);
-    CloseWindow();
+void settings_callback(void *self) {
+    init_settings();
 
-    exit(EXIT_SUCCESS);
+    event_handler = settings_event_handler;
+    screen_drawer = settings_screen_drawer;
 }
 
-gui_button_style_t base_style_button = {
-    GUI_BUTTON,
-    WHITE, WHITE, WHITE, BLANK,
-    TEX_BUTTON12,
-    YELLOW, LIGHTGRAY
-};
+void quit_callback(void *self) {
+    quit();
+}
+
+static gui_button_style_t base_style_button = {
+    GUI_BUTTON,                                         /* type */ 
+    WHITE, WHITE, WHITE, BLANK,                         /* colours */
+    TEX_BUTTON12,                                       /* texture */
+    YELLOW, LIGHTGRAY                                   /* text colours */
+};                                                      /* text */
 
 gui_textdisplay_style_t offline_text = {
-    GUI_TEXTDISPLAY,
-    "PLAY OFFLINE",
-    -1, -1, FONTSZ_DEFAULT,
-    WHITE, BLANK
-};
+    GUI_TEXTDISPLAY,                                    /* type */
+    "PLAY OFFLINE",                                     /* text */
+    -1, -1, FONTSZ_DEFAULT,                             /* spacing & size */
+    WHITE, BLANK                                        /* text colours */
+};                                                      
 
 gui_textdisplay_style_t online_text = {
-    GUI_TEXTDISPLAY,
-    "PLAY ONLINE",
-    -1, -1, FONTSZ_DEFAULT,
-    WHITE, BLANK
-};
+    GUI_TEXTDISPLAY,                                    /* type */ 
+    "PLAY ONLINE",                                      /* text */
+    -1, -1, FONTSZ_DEFAULT,                             /* spacing & size */
+    WHITE, BLANK                                        /* text colours */
+};                                                      
 
 gui_textdisplay_style_t settings_text = {
-    GUI_TEXTDISPLAY,
-    "SETTINGS",
-    -1, -1, FONTSZ_DEFAULT,
-    WHITE, BLANK
-};
+    GUI_TEXTDISPLAY,                                    /* type */
+    "SETTINGS",                                         /* text */
+    -1, -1, FONTSZ_DEFAULT,                             /* spacing & size */
+    WHITE, BLANK                                        /* text colours */
+};                                                      
 
 gui_textdisplay_style_t quit_text = {
-    GUI_TEXTDISPLAY,
-    "QUIT",
-    -1, -1, FONTSZ_DEFAULT,
-    WHITE, BLANK
+    GUI_TEXTDISPLAY,                                    /* type */
+    "QUIT",                                             /* text */
+    -1, -1, FONTSZ_DEFAULT,                             /* spacing & size */
+    WHITE, BLANK                                        /* text colours */
 };
 
 void init_main_menu(void) {
@@ -77,8 +81,8 @@ void init_main_menu(void) {
 
     gui_init_handler(&handler);
 
-    int width = GetScreenWidth();
-    int height = GetScreenHeight();
+    int width = get_window_width();
+    int height = get_window_height();
 
     int scale = width / 240;
 
@@ -125,7 +129,7 @@ void init_main_menu(void) {
     settings_button.y        = 88 * scale;
     settings_button.width    = 81 * scale;
     settings_button.height   = 16 * scale;
-    settings_button.callback = NULL;
+    settings_button.callback = settings_callback;
     settings_button.style    = &settings_style;
 
     gui_add_element(&handler, &settings_button);
@@ -152,8 +156,8 @@ void main_menu_event_handler(void) {
 }
 
 void main_menu_screen_drawer(void) {
-    int width = GetScreenWidth();
-    int height = GetScreenHeight();
+    int width = get_window_width();
+    int height = get_window_height();
 
     int scale = width / 240;
 

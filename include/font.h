@@ -4,11 +4,12 @@
 #include <raylib.h>
 
 typedef enum {
-    FONTSZ_DEFAULT,
-    FONTSZ_SIZE
+   FONTSZ_DEFAULT,
+   FONTSZ_SIZE
 } fontsize_t;
 
 void init_font(void);
+void unload_font(void);
 
 void draw_text(const char *text, int x, int y, fontsize_t size, int x_spacing,
    int y_spacing, Color colour);

@@ -2,7 +2,7 @@
 #define __STTT_GUI_H
 
 #include <font.h>
-#include <texture.h>
+#include <textures.h>
 
 #include <raylib.h>
 

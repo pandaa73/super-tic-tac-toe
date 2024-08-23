@@ -12,15 +12,57 @@ grid_t grid[3][3];
 grid_t wins;
 size_t count[3][3];
 
-cell_state next_state = CELL_X;
-bool_t next_turn = 0;
-size_t next_x = -1;
-size_t next_y = -1;
+cell_state next_state   = CELL_X;
+bool_t next_turn        = 0;
+size_t next_x           = -1;
+size_t next_y           = -1;
 
-cell_state winner = CELL_NONE;
-size_t wins_x = 0;
-size_t wins_o = 0;
-size_t ties   = 0;
+cell_state winner       = CELL_NONE;
+size_t wins_x           = 0;
+size_t wins_o           = 0;
+size_t ties             = 0;
+
+int GRID_SIZE;
+
+int GRID_BIG_SIZE;
+int GRID_BIG_THICKNESS;
+int GRID_BIG_SPACING;
+
+int GRID_SMALL_SIZE;
+int GRID_SMALL_THICKNESS;
+int GRID_SMALL_SPACING;
+
+int GRID_BORDER_X;
+int GRID_BORDER_Y;
+
+#define GRID_ITEM_THICKNESS     GRID_SMALL_THICKNESS
+#define GRID_RESULT_THICKNESS   GRID_BIG_THICKNESS
+
+#define GRID_C0(offset)         (GRID_BIG_SPACING + offset)
+#define GRID_C1(offset)         (GRID_C0(offset) + GRID_SMALL_SIZE)
+#define GRID_C2(offset)         (GRID_C1(offset) + GRID_SMALL_SIZE)
+#define GRID_C3(offset)         (GRID_C2(offset) + GRID_SMALL_SIZE)
+
+void init_game(void) {
+    /* NOTE: there are lots of 'magic numbers' here; *
+     *        they're just values that look nice.    */
+
+    int width = get_window_width();
+    int height = get_window_height();
+
+    GRID_SIZE               = 21 * width / 40;
+
+    GRID_BIG_SIZE           = GRID_SIZE / 3;
+    GRID_BIG_THICKNESS      = GRID_BIG_SIZE / 21;
+    GRID_BIG_SPACING        = 2 * GRID_BIG_THICKNESS;
+
+    GRID_SMALL_SIZE         = (GRID_BIG_SIZE - 2 * GRID_BIG_SPACING) / 3;
+    GRID_SMALL_THICKNESS    = GRID_SMALL_SIZE / 12;
+    GRID_SMALL_SPACING      = 2 * GRID_SMALL_THICKNESS;
+
+    GRID_BORDER_X           = (width  - GRID_SIZE) / 2;
+    GRID_BORDER_Y           = (height - GRID_SIZE) / 2;
+}
 
 void clear_grid(void) {
     memset(grid, 0x00, sizeof(grid));
@@ -170,14 +212,16 @@ void draw_small_cell(cell_state cell, size_t x, size_t y) {
             DrawCircle(
                 x + GRID_SMALL_SIZE / 2,
                 y + GRID_SMALL_SIZE / 2,
-                (GRID_SMALL_SIZE - GRID_SMALL_SPACING) / 2,
+                (GRID_SMALL_SIZE - 2 * GRID_SMALL_SPACING) / 2
+                 + 408 * GRID_ITEM_THICKNESS / 577,     /* thick / ~sqrt(2) */
                 BLUE
             );
 
             DrawCircle(
                 x + GRID_SMALL_SIZE / 2,
                 y + GRID_SMALL_SIZE / 2,
-                (GRID_SMALL_SIZE - GRID_SMALL_SPACING) / 2 
+                (GRID_SMALL_SIZE - 2 * GRID_SMALL_SPACING) / 2
+                 + 408 * GRID_ITEM_THICKNESS / 577      /* thick / ~sqrt(2) */
                  - GRID_ITEM_THICKNESS,
                 BLACK
             );
@@ -276,51 +320,51 @@ void game_screen_drawer(void) {
     DrawLineEx(
         (Vector2){1 * GRID_BIG_SIZE + GRID_BORDER_X,         0 + GRID_BORDER_Y},
         (Vector2){1 * GRID_BIG_SIZE + GRID_BORDER_X, GRID_SIZE + GRID_BORDER_Y},
-        10, WHITE
+        GRID_BIG_THICKNESS, WHITE
     );
 
     DrawLineEx(
         (Vector2){2 * GRID_BIG_SIZE + GRID_BORDER_X,         0 + GRID_BORDER_Y},
         (Vector2){2 * GRID_BIG_SIZE + GRID_BORDER_X, GRID_SIZE + GRID_BORDER_Y},
-        10, WHITE
+        GRID_BIG_THICKNESS, WHITE
     );
 
     DrawLineEx(
         (Vector2){        0 + GRID_BORDER_X, 1 * GRID_BIG_SIZE + GRID_BORDER_Y},
         (Vector2){GRID_SIZE + GRID_BORDER_X, 1 * GRID_BIG_SIZE + GRID_BORDER_Y},
-        10, WHITE
+        GRID_BIG_THICKNESS, WHITE
     );
 
     DrawLineEx(
         (Vector2){        0 + GRID_BORDER_X, 2 * GRID_BIG_SIZE + GRID_BORDER_Y},
         (Vector2){GRID_SIZE + GRID_BORDER_X, 2 * GRID_BIG_SIZE + GRID_BORDER_Y},
-        10, WHITE
+        GRID_BIG_THICKNESS, WHITE
     );
 
     for(size_t i = 0, x = GRID_BORDER_X; i < 3; ++i, x += GRID_BIG_SIZE) {
         for(size_t j = 0, y = GRID_BORDER_Y; j < 3; ++j, y += GRID_BIG_SIZE) {
             DrawLineEx(
-                (Vector2){GRID_C2(x), GRID_C1(y)},
-                (Vector2){GRID_C2(x), GRID_C4(y)},
-                4, WHITE
-            );
-
-            DrawLineEx(
-                (Vector2){GRID_C3(x), GRID_C1(y)},
-                (Vector2){GRID_C3(x), GRID_C4(y)},
-                4, WHITE
-            );
-
-            DrawLineEx(
-                (Vector2){GRID_C1(x), GRID_C2(y)},
-                (Vector2){GRID_C4(x), GRID_C2(y)},
-                4, WHITE
-            );
-
-            DrawLineEx(
+                (Vector2){GRID_C1(x), GRID_C0(y)},
                 (Vector2){GRID_C1(x), GRID_C3(y)},
-                (Vector2){GRID_C4(x), GRID_C3(y)},
-                4, WHITE
+                GRID_SMALL_THICKNESS, WHITE
+            );
+
+            DrawLineEx(
+                (Vector2){GRID_C2(x), GRID_C0(y)},
+                (Vector2){GRID_C2(x), GRID_C3(y)},
+                GRID_SMALL_THICKNESS, WHITE
+            );
+
+            DrawLineEx(
+                (Vector2){GRID_C0(x), GRID_C1(y)},
+                (Vector2){GRID_C3(x), GRID_C1(y)},
+                GRID_SMALL_THICKNESS, WHITE
+            );
+
+            DrawLineEx(
+                (Vector2){GRID_C0(x), GRID_C2(y)},
+                (Vector2){GRID_C3(x), GRID_C2(y)},
+                GRID_SMALL_THICKNESS, WHITE
             );
 
             for(size_t k = 0, x1 = GRID_BIG_SPACING; k < 3;
@@ -375,7 +419,7 @@ void game_end_screen_drawer(void) {
     const char *end_str = (winner == CELL_TIE ? tie_str : win_str);
 
     Vector2 text_size = measure_text(end_str, FONTSZ_DEFAULT,
-        TEXT_SPACING, 0);
+        -1, -1);
 
     text_size.x += 2 * END_BORDER_X;
     text_size.y += 2 * END_BORDER_Y;
@@ -404,6 +448,6 @@ void game_end_screen_drawer(void) {
         end_str,
         GRID_BORDER_X + (GRID_SIZE - text_size.x) / 2,
         GRID_BORDER_Y + (GRID_SIZE - text_size.y) / 2,
-        FONTSZ_DEFAULT, TEXT_SPACING, 0, YELLOW
+        FONTSZ_DEFAULT, -1, -1, YELLOW
     );
 }
