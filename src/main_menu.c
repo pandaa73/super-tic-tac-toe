@@ -28,6 +28,8 @@ void offline_callback(void *self) {
     screen_drawer = game_screen_drawer;
 }
 
+void online_callback(void *self) { return; }
+
 void settings_callback(void *self) {
     init_settings();
 
@@ -113,7 +115,7 @@ void init_main_menu(void) {
     online_button.y        =  64 * scale;
     online_button.width    = 81 * scale;
     online_button.height   = 16 * scale;
-    online_button.callback = NULL;
+    online_button.callback = online_callback;
     online_button.style    = &online_style;
 
     gui_add_element(&handler, &online_button);

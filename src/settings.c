@@ -78,6 +78,8 @@ void save_callback(void *self) {
     screen_drawer = main_menu_screen_drawer;
 }
 
+void empty_callback(void *self) { return; }
+
 static gui_button_style_t base_style_button = {
     GUI_BUTTON,                                         /* type */
     WHITE, WHITE, WHITE, BLANK,                         /* colours */
@@ -155,7 +157,7 @@ void init_settings(void) {
     empty0_button.y        =  64 * scale;
     empty0_button.width    = 81 * scale;
     empty0_button.height   = 16 * scale;
-    empty0_button.callback = NULL;
+    empty0_button.callback = empty_callback;
     empty0_button.style    = &empty0_style;
 
     gui_add_element(&handler, &empty0_button);
@@ -171,7 +173,7 @@ void init_settings(void) {
     empty1_button.y        = 88 * scale;
     empty1_button.width    = 81 * scale;
     empty1_button.height   = 16 * scale;
-    empty1_button.callback = NULL;
+    empty1_button.callback = empty_callback;
     empty1_button.style    = &empty1_style;
 
     gui_add_element(&handler, &empty1_button);
